@@ -23,7 +23,7 @@ def main(dict_dir):
 
     # Training parameters
     num_epochs = 1  #100
-    batch_size = 32
+    batch_size = 64 #32
 
     num_hidden_nodes = 1024
     dropout_rate = 0.1  # make it 0 for no dropout
@@ -42,7 +42,7 @@ def main(dict_dir):
                   metrics=[metrics.mean_squared_error])
 
     max_load_size = 2
-    num_chunks_per_load = 2 #SmallestFactor(len(list_chunks_input), max_load_size)
+    num_chunks_per_load = 7 #SmallestFactor(len(list_chunks_input), max_load_size)
 
     for epoch in range(num_epochs):
         print("epoch " + str(epoch) + "/" + str(num_epochs))
