@@ -7,8 +7,10 @@ from keras.optimizers import Adam
 from keras import metrics
 from math import sqrt, ceil
 import time
+import tensorflow as tf
 
-def main(dict_dir):
+def main(dict_dir, model_dir):
+    os.environ['CUDA_VISIBLE_DEVICES'] = '1'
     # Directories
     global dictionary_dir
     dictionary_dir = dict_dir
@@ -22,8 +24,8 @@ def main(dict_dir):
     num_chunks = len(list_chunks_input)
 
     # Training parameters
-    num_epochs = 1  #100
-    batch_size = 64 #32
+    num_epochs = 50 #100
+    batch_size = 128 #64 #32
 
     num_hidden_nodes = 1024
     dropout_rate = 0.1  # make it 0 for no dropout
@@ -41,9 +43,8 @@ def main(dict_dir):
                   loss='mean_squared_error',
                   metrics=[metrics.mean_squared_error])
 
-    max_load_size = 2
-    num_chunks_per_load = 7 #SmallestFactor(len(list_chunks_input), max_load_size)
-
+    num_chunks_per_load = 10 #SmallestFactor(len(list_chunks_input), max_load_size)
+    print(list_chunks_input)
     for epoch in range(num_epochs):
         print("epoch " + str(epoch) + "/" + str(num_epochs))
 
@@ -59,18 +60,16 @@ def main(dict_dir):
             # Generate the train and val sets
             training_generator, validation_generator, train_size, val_size = \
                 load_train_test(dictionary_dir, chunks, params)
-            print("time taken to load = ", time.time() - start)
+            print("time taken to load = " + str(time.time() - start) + " seconds")
 
             start = time.time()
             train(model, training_generator, validation_generator, epochs=1,
                 train_steps_per_epoch=sum(train_size)/batch_size,
                 val_steps_per_epoch=sum(val_size)/batch_size)
-            print("time taken to train = ", time.time() - start)
+            print("time taken to train = " + str(time.time() - start) + " seconds")
 
             del training_generator, validation_generator, train_size, val_size
-
-    x = 0
-
+    model.save()
 
 def SmallestFactor(N, k):
     out = []
@@ -84,6 +83,6 @@ def SmallestFactor(N, k):
     return 1
 
 
-
 if __name__ == '__main__':
-    main(dict_dir)
+    with tf.device('/gpu:1'):
+        main(dict_dir, model_dir)
