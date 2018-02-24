@@ -35,21 +35,29 @@ def __get_dictionaries(dict_dir, chunks):
     target_dict_val = []
     wav_ids_train = []
     wav_ids_val = []
+    num_frames_train = []
+    num_frames_val = []
 
     for chunk_idx, chunk in enumerate(chunks):
 
         input_dict_train.append(load_pickle(dict_dir, '/noisy/', 'train/', chunk))
         wav_ids_train.append(list(input_dict_train[chunk_idx].keys()))
 
+        # Assuming same number of frames per wav segment (which is true in the current setup)
+        num_frames_train.append(list(input_dict_train[chunk_idx].values())[0].shape[0])
+
         input_dict_val.append(load_pickle(dict_dir, '/noisy/', 'val/', chunk))
         wav_ids_val.append(list(input_dict_val[chunk_idx].keys()))
+
+        # Assuming same number of frames per wav segment (which is true in the current setup)
+        num_frames_val.append(list(input_dict_val[chunk_idx].values())[0].shape[0])
 
         target_dict_train.append(load_pickle(dict_dir, '/clean/', 'train/', chunk))
 
         target_dict_val.append(load_pickle(dict_dir, '/clean/', 'val/', chunk))
 
     return input_dict_train, target_dict_train, input_dict_val, target_dict_val, \
-           [len(wav_ids_train[x]) for x in range(len(chunks))], [len(wav_ids_val[x]) for x in range(len(chunks))]
+           [len(wav_ids_train[x])*num_frames_train[x] for x in range(len(chunks))], [len(wav_ids_val[x])*num_frames_val[x] for x in range(len(chunks))]
 
 
 if __name__ == '__main__':
