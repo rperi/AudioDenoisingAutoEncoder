@@ -10,7 +10,7 @@ import time
 import tensorflow as tf
 
 def main(dict_dir, model_dir):
-    #os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '1'
     # Directories
     global dictionary_dir
     dictionary_dir = dict_dir
@@ -25,7 +25,7 @@ def main(dict_dir, model_dir):
 
     # Training parameters
     num_epochs = 50 #100
-    batch_size = 32
+    batch_size = 256 #32
 
     num_hidden_nodes = 1024
     dropout_rate = 0.1  # make it 0 for no dropout
@@ -84,5 +84,5 @@ def SmallestFactor(N, k):
 
 
 if __name__ == '__main__':
-    #with tf.device('/gpu:1'):
-    main(dict_dir, model_dir)
+    with tf.device('/gpu:1'):
+        main(dict_dir, model_dir)
