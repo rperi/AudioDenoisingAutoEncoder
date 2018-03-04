@@ -26,12 +26,12 @@ def build(num_hidden_nodes, dropout_rate, l1_reg_weight):
     FC1 = Dropout(dropout_rate)(FC1)
 
     FC1 = Dense(num_hidden_nodes, activation='relu',
-                activity_regularizer=regularizers.l2(l1_reg_weight))(FC1)
+                activity_regularizer=regularizers.l1(l1_reg_weight))(FC1)
     FC1 = BN(momentum=BN_momentum)(FC1)
     FC1 = Dropout(dropout_rate)(FC1)
 
     FC1 = Dense(num_hidden_nodes, activation='relu',
-                activity_regularizer=regularizers.l2(l1_reg_weight))(FC1)
+                activity_regularizer=regularizers.l1(l1_reg_weight))(FC1)
     FC1 = BN(momentum=BN_momentum)(FC1)
     FC1 = Dropout(dropout_rate)(FC1)
 
