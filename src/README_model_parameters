@@ -1,0 +1,24 @@
+The following are the parameters of the selected model
+
+Choice of Machine Learning library : Keras
+
+        Features  
+Input:      13 mfcc + delta + delta-delta
+            spliced: Window size =  +/- 7
+            input dim = 585 (13*3*15)
+Output:     central frame mfcc + delta + delta-delta
+            output dim = 39
+        
+        Architecture
+Encoder:    Type of layers: Fully Connected (Dense)
+            Number of layers = 3
+            Num nodes = 1024
+            Activation = relu
+            Dropout rate = 0.2
+            Batch Normalization Moemntum = 0.99
+            Weight Regularizer : l1  : lambda = 10e-5
+
+Decoder:    Activation = linear
+
+Optimizer:  Adam: Learning rate = 0.0001
+
